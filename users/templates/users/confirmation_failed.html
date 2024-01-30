@@ -1,0 +1,15 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="alert alert-danger" role="alert">{{ msg }}</div>
+    <div class="content" >
+        <h2 class="title">Confirmation failed</h2>
+        <p>Be warn that you can only have one account per email address so if you just forgor your password you can reset it
+            <a href="{% url "password_reset" %}"> here</a></p>
+            <small class="text-muted" style="margin-left: 5px;">
+                Problems activating your account? <a class="ml-2" href='{% url "request-new-link-from-email" %}'>Request a new activation link</a>
+            </small>
+
+    </div>
+{% endblock %}

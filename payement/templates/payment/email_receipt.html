@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head></head>
+    <body>
+    <style>
+        .red {
+            color: red;
+            background-color: black;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-direction: column-reverse;
+
+        }
+    </style>
+
+
+
+        <h1>{{ title_list }}</h1>
+        <h2 class="red">Test du template</h2>
+        <table>
+            {% for title in title_list %}
+                <tr>
+                    <td>{{ title }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+            </tr>
+        </table>
+
+    </body>
+</html>

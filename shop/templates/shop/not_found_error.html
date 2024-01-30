@@ -1,0 +1,13 @@
+{% extends "shop/article.html" %}
+{% load my_tags %}
+{% block head_content %}
+    <div class="content">
+        <h2 class="title-not-underline">Sorry, the article you are looking for does not exist</h2>
+        <p class="ps-2">Return to the <a  href="{% url "shop-1" page=1 %}">shop</a></p>
+    </div>
+{% endblock %}
+{#{% block content %}#}
+{#    #}
+{#{% endblock %}#}
+{% block filter_menu %}{% endblock %}
+{% block side_bar %}{% endblock %}

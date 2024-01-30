@@ -1,0 +1,18 @@
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+</head>
+<div class="table-flex-container" >
+    <div class="table-row" style="background-color: aquamarine; border-bottom: 1px solid black">
+        <h2>Confirm Your Email</h2>
+    </div>
+    <div class="table-row">
+        <p style="text-align: center">Thank you for joining us!<br>
+        please click the button below to confirm your email, or you won't be able to log into your account</p>
+    </div>
+    <div class="table-row">
+        <a id="buttonEmailConfirm" href="{{link}}">Verify</a>
+    </div>
+
+</div>
+

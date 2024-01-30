@@ -1,0 +1,35 @@
+{% extends "shop/article.html" %}
+{% block head_content %}{% endblock %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="content">
+    {% for item, url in items %}
+
+        <div class="flex-container item-separation">
+
+            <div class="title"><h3>{{ item.title }}</h3></div>
+            <div class="row-f">
+                <img class="card-img-top" src="{{ url }}" alt="image de {{ item.title }}">
+
+
+            <div class="flex-container description">
+                 <div class="row-f">
+                    <p>{{ item.description }}</p>
+                </div>
+                 <div class="row-f-end">
+                     <p>{{ item.price }}.- <a href="{% url "product" id=item.auto_increment_id %}" class="btn btn-info">More Info</a></p>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+    {% endfor %}
+    <div class="center-container">
+        <a class="btn btn-info mt-2" href="{% url "shop" filter="recent" page=1 %}" >More products</a>
+    </div>
+    </div>
+{% endblock %}

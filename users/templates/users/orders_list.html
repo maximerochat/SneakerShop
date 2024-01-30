@@ -1,0 +1,54 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% load my_tags %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="content">
+    {% block shop_title %}
+    <h2 class="title-not-underline">Your Orders</h2>
+    {% endblock %}
+
+
+
+
+        {% if items.all|length > 0 %}
+        {% for order in items.all %}
+
+
+
+
+            <ul class="list-group  ">
+
+                <li class="list-group-item list-container overline">
+                    <div class="list-element "> Order from the {{ order.timestamp }}</div>
+                    <div class="list-element text-muted small"><p class="order-items">
+                        {% for key, value in order.items.items %}
+                            {{ key }}
+                        {% endfor %}
+                    </p>
+                    </div>
+
+                    <div class="list-element list-element-right-center " style="align-self: center;!important;">
+                        <p>
+
+                            <a class="btn btn-info" href="{% url "order-detail" id=order.order_id %}" style="margin-right: 5px;">More</a>
+
+                        </p>
+                    </div>
+                </li>
+
+        {% endfor %}
+            </li>
+        </ul>
+        {% else %}
+            <p class="title-not-underline">You have no past order for the moment, but you can have a look at our <a href="{% url "redirect_shop" %}" >shop</a> to fix that ;)</p>
+        {% endif %}
+     </div>
+
+
+{% endblock %}
+{% block side_bar %}
+{% endblock %}

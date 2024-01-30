@@ -1,0 +1,57 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+
+{% block content_login_user %}
+<h1>Are you sure you want to sign out?</h1>
+
+{#<p>{% trans 'Are you sure you want to sign out?' %}</p>#}
+ <div class="border-top pt-3" style="margin-left: 5px;">
+    <form method="post" id="logoutForm" action="{% url 'account_logout' %}">
+      {% csrf_token %}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+      {% endif %}
+        <div class="container justify-content-center w-100">
+            <div class="row justify-content-center">
+                <button type="submit" class="btn btn-info mb-2" style="width: 20%;">{% trans 'Sign Out' %}</button>
+            </div>
+        </div>
+    </form>
+     <a href="{% url "home" %}" class="pl-2 border-top mt-2">Go Back to the homepage</a>
+</div>
+
+{#<script type="text/javascript">#}
+{#    window.onload=function(){#}
+{#        var auto = setTimeout(function(){ autoRefresh(); }, 5);#}
+{##}
+{#        function submitform(){#}
+{##}
+{#          document.forms["logoutForm"].submit();#}
+{#        }#}
+{##}
+{#        function autoRefresh(){#}
+{#           clearTimeout(auto);#}
+{#           auto = setTimeout(function(){ submitform(); autoRefresh(); }, 50);#}
+{#        }#}
+{#    }#}
+{#</script>#}
+
+
+
+{##}
+{#{% extends "home/base.html" %}#}
+{##}
+{#{% block head_content %}{% endblock %}#}
+{#{% block content %}#}
+{#    <div class="content" >#}
+{#        <h2>You have been logged out</h2>#}
+{#        <div class="border-top pt-3" style="margin-left: 5px;">#}
+{#            <small class="text-muted">#}
+{#                <a class="" href="{% url "login" %}">Log In Again</a>#}
+{#            </small>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}

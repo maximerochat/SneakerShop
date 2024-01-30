@@ -1,0 +1,88 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% load my_tags %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="content">
+    {% block shop_title %}
+    <h2 class="title-not-underline">Your Cart</h2>
+    {% endblock %}
+    {% for item in items %}
+{#        <div class="flex-container" style="flex-direction: row">#}
+
+        {% if item.items.all|length > 0 %}
+        {% for product in item.items.all %}
+{#        <div class="item-separation">#}
+{#        <div class="flex-container">#}
+
+
+
+            <ul class="list-group  ">
+
+                <li class="list-group-item list-container overline">
+                    <div class="list-element ">{{ product.title }}</div>
+                    <div class="list-element" onchange="">
+                        <input type="number" onchange="addItem({{ product.auto_increment_id }}, this.value)" value="{{ item.quantity|get_item:product.auto_increment_id|to_str }}" style="width: 50px">
+                         x {{ product.price }}.-
+
+                        {% with item.quantity|get_item:product.auto_increment_id|to_str as cart_quantity %}
+                        {% if product.quantity < cart_quantity|to_int %}
+                            <span class="alert-delivery-time">This item might take more time than usual to be deliver</span>
+                        {% endif %}
+                        {% endwith %}
+                    </div>
+{#                    <div class="list-element">{{ SpecialEvents_date|index:i }}</div>#}
+                    <div class="list-element list-element-right ">
+                        <p>
+                            <a href="{% url "delete_cart_request" id=product.auto_increment_id %}" class="btn btn-danger">Delete</a>
+                            <a class="btn btn-info" href="{% url "product" id=product.auto_increment_id %}" style="margin-right: 5px;">Product Page</a>
+                            {% with quantity=item.quantity|get_item:product.auto_increment_id|to_str %}
+                            {{ product.price|multiply:quantity }}.-
+                            {% endwith %}
+                        </p>
+                    </div>
+                </li>
+
+
+        {% endfor %}
+            <li class="list-group-item list-container-right">
+                <div class="list-element list-element-right overline">
+                    <div class="row-f" style="justify-content: space-between">
+                        <p>+ TVA(7,4%)</p>
+                        <p>total : {{ item.sum|add_tva }}.-</p>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item list-container-right">
+                <form action="{% url "create-checkout-session" cart_id=item.user_id.id  %}" method="POST">
+                    {% csrf_token %}
+                    <div class="list-element list-element-right" id="pay_button">
+                        <input type="submit" class="btn btn-info" value="Pay">
+                    </div>
+                </form>
+            </li>
+        </ul>
+        {% else %}
+            <p class="title-not-underline">Your cart is empty, you can go to the shop to find articles <a href="{% url "redirect_shop" %}" >shop</a></p>
+        {% endif %}
+     </div>
+    {% endfor %}
+
+    <script>
+    function addItem(id_item, quantity) {
+        let url = "{% url "add_cart_quantity"  id_item="id_item" quantity="quantity" %}";
+
+        url = url.replace("id_item", id_item).replace("quantity", quantity);
+        location.href = url
+
+    }
+    </script>
+
+
+{#    </div>#}
+{% endblock %}
+{% block side_bar %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% load my_tags %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="content">
+    {% block shop_title %}
+        <h2 class="title-not-underline">Latest pairs</h2>
+    {% endblock %}
+    {% for item, url in items %}
+        <div class="item-separation">
+        <div class="flex-container">
+
+            <div class="title"><h5>{{ item.title }}</h5></div>
+            <div class="row-f">
+                <img src="{{ url }}" class="card-img-top-home" alt="image de {{ item.title }}">
+
+
+                <div class="flex-container description" style="justify-content: space-between">
+
+                     <div class="row-f ">
+                        <p >{{ item.description }}</p>
+                    </div>
+                    <div class="row-f-end">
+                            <p>{{ item.price }}.- <a href="{% url "product" id=item.auto_increment_id %}" class="btn btn-info">More Info</a></p>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+
+
+
+
+
+
+{% endblock %}
+{% block side_bar %}
+    <div class="content">
+        <h3 class="title-not-underline">Filter</h3>
+            <ul id="filter">
+                <button class="btn-filter" onclick="location.href='/filter/recent';">Most recent</button>
+                <button class="btn-filter" onclick="location.href='/filter/pricedesc';"> Higher prices </button>
+                <button class="btn-filter" onclick="location.href='/filter/priceasc';"> Lower prices </button>
+            </ul>
+
+    </div>
+{% endblock %}
+
+{% block filter_menu %}
+<div class="filter-button">
+    <a class="row-f" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" style="align-items: center;">
+        <div class="row-f" style="align-items: center; align-content: center">
+            <img class="icon" src="{% static "icons/next-arrow.png" %}" alt="arrow-next">
+
+            <p style="margin-top: 2px"> filters</p>
+        </div>
+    </a>
+</div>
+
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Filters</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    {% block filter_canva %}
+    {% endblock %}
+  </div>
+</div>
+
+{% endblock %}

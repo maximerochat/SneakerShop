@@ -1,0 +1,109 @@
+<div class="content">
+    <h3>Recommendations</h3>
+    {% load my_tags %}
+    <div class="recommendation">
+    <div class="row-f align-center justify-content-center" style="width: 40px">
+        <a id="prevButton" onclick="changeReco('previous')" class="material-symbols-outlined">
+        arrow_back_ios
+        </a>
+    </div>
+    {% define 1 as iterator %}
+
+    {% for item in page %}
+
+        <a class="recommendation-item {% if iterator <= 3 %}active-reco{% endif %}" href="{% url "product" id=item.auto_increment_id %}">
+
+
+                <img class="recommendation-item-img" src="{{ item.images_set.first.images.url }}" alt="Card image cap">
+                <p>{{ item.title }}</p>
+                <p class="row-f-end">{{ item.price }}.-</p>
+
+
+
+
+        </a>
+
+        {% define iterator|add:1 as iterator %}
+    {% endfor %}
+
+        <div class="row-f align-center justify-content-center" style="width: 40px">
+        <a id="nextButton" onclick="changeReco('next')" class="material-symbols-outlined">
+        arrow_forward_ios
+        </a>
+    </div>
+
+    </div>
+    <div class="flex-container justify-content-center align-center">
+        <a href="{% url "shop-1" page=1 %}" class="btn btn-info mt-3 mb-3" style="max-width: 250px;">More Products</a>
+    </div>
+</div>
+
+<script>
+
+    let reco = document.getElementsByClassName("recommendation-item");
+    let num=1;
+    const mediaQuery = window.matchMedia('(max-width: 500px)');
+
+    function changeReco(action=""){
+        console.log(mediaQuery);
+        let number_of_el;
+        let multiplier;
+        if (mediaQuery.matches) {
+
+            number_of_el = 1;
+            multiplier = 3;
+        } else {
+
+            number_of_el = 3;
+            multiplier = 1;
+        }
+        console.log(action);
+        if (action==='next'&&reco.length > 1&&num<3*multiplier*{{ page.paginator.num_pages }}) {
+            console.log("fda");
+            num += 1;
+        } else if (action==='previous'&&reco.length > 1&& num>1) {
+            console.log("prev");
+            console.log(num);
+            num-=1;
+        }
+
+
+        if (num>3*multiplier*{{ page.paginator.num_pages }}||reco.length <= 3&&!mediaQuery.matches) {
+            num = 1;
+        } else if (num>=reco.length) {
+            num=reco.length;
+        }
+
+        if (num===3*multiplier*{{ page.paginator.num_pages }}) {
+            console.log("hey cdjksafkjaf");
+            document.getElementById("nextButton").classList.add("hide");
+        } else if (num===1) {
+            document.getElementById("prevButton").classList.add("hide");
+        } else {
+            document.getElementById("nextButton").classList.remove("hide");
+            document.getElementById("prevButton").classList.remove("hide");
+        }
+
+        document.querySelectorAll('body .active-reco').forEach((removeMe) => {
+        removeMe.classList.remove('active-reco');
+        });
+
+        console.log(reco);
+        for (let i=number_of_el*(num-1); i<number_of_el*num; i++){
+            reco[i].classList.add("active-reco");
+        }
+        return true;
+    }
+
+    window.onload = changeReco("next");
+    let media_query_listener = window.matchMedia("(max-width: 500px)");
+    function triggerChangeReco(query) {
+        if (query.matches) {
+            changeReco();
+        }
+    }
+    {#triggerChangeReco(media_query_listener);#}
+    media_query_listener.addEventListener("change", () => {
+    changeReco();
+});
+</script>

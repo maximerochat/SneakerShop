@@ -1,0 +1,32 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% load crispy_forms_tags %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="content" >
+        <h2 class="title-not-underline border-bottom pb-2" style="padding: 0 0 0 2px;">{{ user.get_username }}'s Profile Page</h2>
+        <div class="flex-container-row border-bottom">
+            <div class="flex-container">
+                <p class="ml-2">Email : <span class="text-muted ">{{ user.email }}</span></p>
+            </div>
+            <div class="flex-container">
+                <p class="ml-2">Username : <span class="text-muted ml-2">{{ user.get_username }}</span></p>
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group" style="margin: 0 5px 0 5px;">
+                <legend class="border-bottom mb-4">Update Infos</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-info mb-2 mt-2" type="submit" style="margin-left: 5px;">Update</button>
+                <a class="btn btn-info" href="{% url 'account_reset_password' %}" style="margin-left: auto">Reset Password</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="content">
+        <h1 class="title">Buy article</h1>
+    </div>
+{% endblock %}
+{% block side_bar %}
+    {{ block.super }}
+{#    <div class="content">#}
+{#        <h3 class="title-not-underline">Filter</h3>#}
+{#            <ul id="filter">#}
+{#                <button class="btn-filter" onclick="location.href='/filter/recent';">Most recent</button>#}
+{#                <button class="btn-filter" onclick="location.href='/filter/pricedesc';"> Higher prices </button>#}
+{#                <button class="btn-filter" onclick="location.href='/filter/priceasc';"> Lower prices </button>#}
+{#            </ul>#}
+{##}
+{#    </div>#}
+{% endblock %}

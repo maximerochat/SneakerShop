@@ -1,0 +1,242 @@
+{% extends "shop/article.html" %}
+{% load static %}
+{% load my_tags %}
+{% block head_content %}{% endblock %}
+{% block shop_title %}
+    <h2>Shop</h2>
+{% endblock %}
+{% block content %}
+    <div class="container-fluid-wrap">
+    {% for item, url in items %}
+        <div class="card card-sizing me-3" style="width: 18rem;">
+            <img class="card-img-top" src="{{ url }}" alt="Card image cap">
+                <div class="card-body">
+                    <div>
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text">{{ item.description }}</p>
+                        </div>
+                <div class="row-f-end" style="justify-content: space-between">
+                    <p>{{ item.price }}.- <a href="{% url "product" id=item.auto_increment_id %}" class="btn btn-info">More Info</a></p>
+                </div>
+          </div>
+        </div>
+
+    {% endfor %}
+    </div>
+
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="{% url "shop-1" page="1" %}{{ filter }}">First</a>
+            <a class="btn btn-outline-info mb-4" href="{% url "shop-1" page=page_obj.previous_page_number %}{{ filter }}">Previous</a>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+               <a class="btn btn-info mb-4" href="{% url "shop-1"  page=num %}{{ filter }}">{{ num }}</a>
+            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                <a class="btn btn-outline-info mb-4" href="{% url "shop-1" page=num %}{{ filter }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="{% url "shop-1" page=page_obj.next_page_number %}{{ filter }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="{% url "shop-1" page=page_obj.paginator.num_pages %}{{ filter }}">Last</a>
+        {% endif %}
+
+
+
+
+{% endblock %}
+
+{% block filter_canva %}
+
+
+                <label for="filter-select">ordering</label>
+                <select class="btn-filter"  name="filter" id="filter-select" style="border-top: 1px solid black">
+                    <option {% if "recent" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}recent{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}';" value="recent">Most recent</option>
+                    <option {% if "pricedesc" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}pricedesc{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}';" value="pricedesc">Higher prices</option>
+                    <option {% if "priceasc" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}priceasc{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}';" value="priceasc">Lower prices</option>
+                </select>
+
+
+                <div class="flex-container mt-4">
+                    <label for="price-range">Price range</label>
+
+                        <div class="flex-container-row" style="justify-content: space-between">
+                            <div style="width: 40%;display: flex;align-items: center; flex-direction: column">
+                                <label for="minPrice" style="text-align: center;">Minimum Price</label>
+                                <input onchange="setNewVal('minPrice')" type="text" id="minPrice-2" style="max-width: 100%" value="{% if filters|get_item:"min" is not None %}{{ filters|get_item:"min" }}{% else %}0{% endif %}">
+                            </div>
+                            <div style="width: 40%;display: flex;align-items: center; flex-direction: column">
+                                <label for="maxPrice" style="text-align: center;">Minimum Price</label>
+                                <input onchange="setNewVal('minPrice')" type="text" id="maxPrice-2" style="max-width: 100%" value="{% if filters|get_item:"max" is not None %}{{ filters|get_item:"max" }}{% else %}{{ max_price }}{% endif %}">
+                            </div>
+                        </div>
+
+                    <div id="slider-2" class="slider mt-3"></div>
+
+                    <div>
+                        <label for="brand-filter" class="mt-4" >Brand</label>
+                        <select class="btn-filter" name="brand-filter" id="brand-filter">
+                            <option {% if filters|get_item:"brand" is None %} selected="selected" {% endif %} value="All" onclick="location.href='/shop/1/{{ filter }}'">All</option>
+                        {% for choice in CHOICES %}
+                            <option {% if filters|get_item:"brand" == choice %} selected="selected" {% endif %} value="{{ choice }}" onclick="location.href=`/shop/1/{{ filter }}&brand=${this.value}`">{{ choice }}</option>
+                        {% endfor %}
+{#                            <option {% if filters|get_item:"brand" == "Adidas" %} selected="selected" {% endif %} value="Adidas" onclick="location.href=`/shop/1/{{ filter }}&brand=${this.value}`">Adidas</option>#}
+                        </select>
+
+                    </div>
+                    <div>
+{#                        <label for="brand-filter" class="mt-4" >Size</label>#}
+                        <label for="30-40">35-40</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="35-40" value="35-40" {% if filters|get_item:"35-40" == "True" %}checked{% endif %}>
+                        <label for="40-43">40-43</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="40-43" value="40-43" {% if filters|get_item:"40-43" == "True" %}checked{% endif %}>
+                        <label for="43-47">43-47</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="43-47" value="43-47" {% if filters|get_item:"43-47" == "True" %}checked{% endif %}>
+                    </div>
+
+                </div>
+
+
+                </div>
+{% endblock %}
+
+{% block side_bar %}
+    <script src="{% static "noUiSlider-15.6.0/nouislider.min.js" %}"></script>
+    <div class="content">
+        <h3 class="title-not-underline">Filters</h3>
+
+                <label for="filter-select">ordering</label>
+                <select class="btn-filter"  name="filter" id="filter-select" style="border-top: 1px solid black">
+                    <option {% if "recent" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}recent{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}&35-40={{ filters|get_item_filter_size:"35-40"}}&40-43={{ filters|get_item_filter_size:"40-43" }}&43-47={{ filters|get_item_filter_size:"43-47" }}';" value="recent">Most recent</option>
+                    <option {% if "pricedesc" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}pricedesc{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}&35-40={{ filters|get_item_filter_size:"35-40" }}&40-43={{ filters|get_item_filter_size:"40-43" }}&43-47={{ filters|get_item_filter_size:"43-47" }}';" value="pricedesc">Higher prices</option>
+                    <option {% if "priceasc" in filter %}selected="selected"{% endif %} onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}priceasc{% if filters|get_item:"max" %}&max={{ filters|get_item:"max" }}&min={{ filters|get_item:"min" }}{% endif %}&35-40={{ filters|get_item_filter_size:"35-40" }}&40-43={{ filters|get_item_filter_size:"40-43" }}&43-47={{ filters|get_item_filter_size:"43-47" }}';" value="priceasc">Lower prices</option>
+                </select>
+
+
+            
+{#                <button class="btn-filter" onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}recent';">Most recent</button>#}
+{#                <button class="btn-filter" onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}pricedesc';"> Higher prices </button>#}
+{#                <button class="btn-filter" onclick="location.href='/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}priceasc';"> Lower prices </button>#}
+
+                <div class="flex-container mt-4">
+                    <label for="price-range">Price range</label>
+
+{#                    <input onchange="generateLink()" type="range" min="1" max="100" value="50" class="slider" id="price-range">#}
+
+                        <div class="flex-container-row" style="justify-content: space-between">
+                            <div style="width: 40%;display: flex;align-items: center; flex-direction: column">
+                                <label for="minPrice" style="text-align: center;">Minimum Price</label>
+                                <input onchange="setNewVal('minPrice')" type="text" id="minPrice-1" style="max-width: 100%" value="{% if filters|get_item:"min" is not None %}{{ filters|get_item:"min" }}{% else %}0{% endif %}">
+                            </div>
+                            <div style="width: 40%;display: flex;align-items: center; flex-direction: column">
+                                <label for="maxPrice" style="text-align: center;">Minimum Price</label>
+                                <input onchange="setNewVal('minPrice')" type="text" id="maxPrice-1" style="max-width: 100%" value="{% if filters|get_item:"max" is not None %}{{ filters|get_item:"max" }}{% else %}{{ max_price }}{% endif %}">
+                            </div>
+                        </div>
+
+                    <div id="slider-1" class="mt-3 slider"></div>
+
+                    <div>
+                        <label for="brand-filter" class="mt-4" >Brand</label>
+                        <select class="btn-filter" name="brand-filter" id="brand-filter">
+                            <option {% if filters|get_item:"brand" is None %} selected="selected" {% endif %} value="All" onclick="location.href='/shop/1/{{ filter }}'">All</option>
+                        {% for choice in CHOICES %}
+                            <option {% if filters|get_item:"brand" == choice %} selected="selected" {% endif %} value="{{ choice }}" onclick="location.href=`/shop/1/{{ filter }}&brand=${this.value}`">{{ choice }}</option>
+                        {% endfor %}
+{#                            <option {% if filters|get_item:"brand" == "Adidas" %} selected="selected" {% endif %} value="Adidas" onclick="location.href=`/shop/1/{{ filter }}&brand=${this.value}`">Adidas</option>#}
+                        </select>
+
+                    </div>
+                    <div>
+{#                        <label for="brand-filter" class="mt-4" >Size</label>#}
+                        <label for="30-40">35-40</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="35-40" value="35-40" {% if filters|get_item:"35-40" == "True" %}checked{% endif %}>
+                        <label for="40-43">40-43</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="40-43" value="40-43" {% if filters|get_item:"40-43" == "True" %}checked{% endif %}>
+                        <label for="43-47">43-47</label>
+                        <input onchange="sizeRanges(this.id)" type="checkbox" name="30-40" id="43-47" value="43-47" {% if filters|get_item:"43-47" == "True" %}checked{% endif %}>
+                    </div>
+
+                </div>
+    </div>
+
+
+    <script>
+
+let slider;
+let inputMinId;
+let inputMaxId;
+const mediaQuery = window.matchMedia('(max-width: 500px)');
+if (mediaQuery.matches) {
+    slider = document.getElementById('slider-2');
+    inputMinId = "minPrice-2";
+    inputMaxId = "maxPrice-2";
+} else {
+    slider = document.getElementById('slider-1');
+    console.log("test1");
+    inputMinId = "minPrice-1";
+    inputMaxId = "maxPrice-1";
+}
+
+
+
+var min = {% if filters|get_item:"min" is not None %}{{ filters|get_item:"min" }}{% else %}0{% endif %};
+var max = {% if filters|get_item:"max" is not None %}{{ filters|get_item:"max" }}{% else %}{{ max_price }}{% endif %};
+noUiSlider.create(slider, {
+    start: [min, max],
+    connect: true,
+    range: {
+        'min': 0,
+        'max': {{ max_price }}
+    }
+});
+
+
+
+function setNewVal() {
+    let inputMin = document.getElementById(inputMinId);
+    let inputMax = document.getElementById(inputMaxId);
+    slider.noUiSlider.set([inputMin.value, inputMax.value]);
+     location.href = `/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}{{ filters|get_item:"ordering" }}{% if filter %}&{% endif %}min=${inputMin.value}&max=${inputMax.value}&35-40={{ filters|get_item:"35-40" }}&40-43={{ filters|get_item_filter_size:"40-43" }}&43-47={{ filters|get_item_filter_size:"43-47" }}`;
+}
+
+slider.noUiSlider.on('change', function (values, handle) {
+    console.log(values)
+    location.href = `/shop/1/?{% if search_input is not None %}search_input={{ search_input }}&{% endif %}{{ filters|get_item:"ordering" }}{% if filter %}&{% endif %}min=${values[0]}&max=${values[1]}&35-40={{ filters|get_item_filter_size:"35-40" }}&40-43={{ filters|get_item_filter_size:"40-43" }}&43-47={{ filters|get_item_filter_size:"43-47" }}`;
+});
+slider.noUiSlider.on('update', function (values, handle) {
+    let inputMin = document.getElementById(inputMinId);
+    let inputMax = document.getElementById(inputMaxId);
+    inputMin.value = values[0];
+    inputMax.value = values[1];
+});
+
+
+function sizeRanges(id) {
+
+    {#let id = id.value()#}
+    var decoded = "{{ filter }}".replace(/&amp;/g, '&');
+    console.log(decoded.includes(id));
+    console.log(id);
+    const checkbox = document.getElementById(id);
+    console.log(checkbox)
+    if (decoded.includes(id)) {
+        decoded = decoded.replace(`${id}=False`, `${id}`);
+        decoded = decoded.replace(`${id}=True`, `${id}`);
+        console.log("decode =====")
+        console.log(decoded)
+    } else {
+        decoded += `&${id}`
+    }
+    console.log(checkbox.checked)
+    if (checkbox.checked) {
+
+        location.href=`/shop/1/${decoded.replace(`${id}`, `${id}=False`)}`;
+    } else {
+        location.href=`/shop/1/${decoded.replace(`${id}`, `${id}=True`)}`;
+    }
+}
+    </script>
+
+{% endblock %}
+
+

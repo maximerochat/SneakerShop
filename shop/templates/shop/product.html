@@ -1,0 +1,89 @@
+{% extends "home/base.html" %}
+{% load static %}
+{%  load my_tags %}
+{% block head %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="{% static "shop/shop_style.css" %}">
+{% endblock %}
+{% block head_content %}{% endblock %}
+{% block content %}
+    <div class="content">
+        <div class="flex-container">
+            <h2 class="title" style="text-align: left;">{{ item.title }}</h2>
+
+
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for i in images|list_index %}
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ i }}" class="{% if i == 0 %}active{% endif %} indicators" aria-current="true" aria-label="Slide {{ i|add:"1" }}"></button>
+{#            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="indicators" aria-label="Slide 2"></button>#}
+{#            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" class="indicators" aria-label="Slide 3"></button>#}
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for image in images %}
+            <div class="carousel-item active">
+                <img src="{{ image.images.url }}" class="d-block img-contain w-100" alt="...">
+
+            </div>
+            {% endfor %}
+
+
+        </div>
+        <button class="carousel-control-prev"  type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"  aria-hidden="true"></span>
+            <span class="visually-hidden" >Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+
+
+{#            <img src="{{ item.image.url }}" alt="{{ item.title }}">#}
+        <h2>Descritption</h2>
+            <p>{{ item.description }}</p>
+
+            <div class="row-f-end" style="justify-content: space-between">
+
+                 <div class="price-product-page">
+
+                    <p>{{ item.price }}.- </p>
+
+                     <a class="btn  btn-info" href="{% url "add_cart_request" id_item=item.auto_increment_id %}">Add to cart</a>
+                </div>
+                <div>
+                    <p style="display: inline;vertical-align: middle">In stock :
+                        <span class="text-muted" >{{ item.quantity }} remaining</span>
+                            {% if item.quantity <= 0 %}
+                                <span class="alert-delivery-time">
+                                    <span class="material-symbols-outlined" style="color: red; transform: scale(80%); top: 5px; position: relative;">warning</span>
+                                    this item might take more time than usual to be deliver
+                                </span>
+                            {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% recommendations %}
+
+
+
+{% endblock %}
+{% block side_bar %}
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
+numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
+optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
+obcaecati tenetur iure eius earum ut molestias architecto voluptate aliquam
+nihil, eveniet aliquid culpa officia aut! Impedit sit sunt quaerat, odit,
+tenetur error, harum nesciunt ipsum debitis quas aliquid. Reprehenderit,
+quia. Quo neque error repudiandae fuga? Ipsa laudantium m </p>
+    </div>
+{% endblock %}

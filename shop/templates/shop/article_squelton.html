@@ -1,0 +1,25 @@
+    {% for item in items %}
+        <div class="content">
+        <div class="flex-container">
+
+            <div class="title"><h1>{{ item.title }}</h1></div>
+            <div class="row-f">
+                <img src="{{ item.image.url }}" alt="image de {{ item.title }}">
+
+
+            <div class="flex-container">
+                 <div class="row-f">
+                    <p class="description">{{ item.description }}</p>
+                </div>
+                 <div class="row-f-end">
+                     <div class="price">
+                        <p>{{ item.price }}.-</p>
+                         <button class="btn btn-info" onclick="location.href='https://google.com';">More info</button>
+                     </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+        </div>
+    {% endfor %}
